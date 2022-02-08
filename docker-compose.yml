@@ -1,0 +1,12 @@
+version: '3.8'
+
+services: 
+  api:
+    container_name: edistribucion-api
+    build:
+      context: ./docker
+    ports:
+        - '8081:80'
+    volumes:
+      - ./src:/var/www/src
+      - ./docker/apache-default.conf:/etc/apache2/sites-enabled/000-default.conf
