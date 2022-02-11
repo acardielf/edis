@@ -1,0 +1,20 @@
+{
+    "name": "edistribucion/edistribucion",
+    "description": "API PHP para E-distribucion",
+    "autoload": {
+        "psr-4": {
+            "Edistribucion\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ángel Cardiel",
+            "email": "angel.cardiel@protonmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "^2.3",
+        "guzzlehttp/guzzle": "^7.4",
+        "ext-http": "*"
+    }
+}
