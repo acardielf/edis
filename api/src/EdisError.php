@@ -1,6 +1,8 @@
 <?php
 namespace Edistribucion;
 
+use Throwable;
+
 class EdisError extends Exception
 {
     // Redefine the exception so message isn't optional
