@@ -2,6 +2,8 @@
 
 namespace Edistribucion;
 
+use Cassandra\Date;
+use DateTime;
 use Edistribucion\EdisError;
 use Edistribucion\EdistribucionMessageAction;
 use Edistribucion\UrlError;
@@ -10,6 +12,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Cookie\SessionCookieJar;
+use http\Exception;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Psr\Http\Message\ResponseInterface;
@@ -20,37 +23,48 @@ class Edistribucion
     private $session;
     private $SESSION_FILE;
     private $ACCESS_FILE;
-    private $token;
-    private $credentials;
-    private $dashboard;
-    private $command_index;
-    private $identities;
+    private string $token;
+    private array $credentials;
+    private string $dashboard;
+    private int $command_index;
+    private array $identities;
     private $appInfo;
     private $context;
-    private $access_date;
-    private $log;
-    private $client;
+    private DateTime $access_date;
+    private Logger $log;
+    private Client $client;
     private string $username;
     private string $password;
+    private $jar;
 
     public function __construct()
     {
-        $jar = new SessionCookieJar('CookieJar', true);
+        $this->jar = new SessionCookieJar('CookieJar', true);
         $this->log = new Logger('name');
         $this->log->pushHandler(new StreamHandler('php://stdout', Logger::INFO));
         $this->client = new Client([
             'base_uri' => "https://zonaprivada.edistribucion.com/",
-            'cookies' => $jar
+            'cookies' => $this->jar
         ]);
+        $this->SESSION_FILE = "edistribucion.session";
+        $this->ACCESS_FILE = "edistribucion.access";
+        $this->session = null;
+        $this->token = "undefined";
+        $this->credentials = [];
+        $this->dashboard = "https://zonaprivada.edistribucion.com/areaprivada/s/sfsites/aura?";
+        $this->command_index = 1;
+        $this->identities = [];
+        $this->appInfo = null;
+        $this->context = null;
+        $this->access_date = new DateTime("now");
 
     }
 
     public function login(string $username, string $password)
     {
-        $this->log->info("Loging...");
+        $this->log->info("Logging...");
         $this->username = $username;
         $this->password = $password;
-        $this->dashboard = "https://zonaprivada.edistribucion.com/areaprivada/s/sfsites/aura?";
         if (!$this->check_tokens()) {
             $this->session = "";
             return $this->force_login();
@@ -154,10 +168,21 @@ class Edistribucion
         $this->token = $jr['token'];
         $this->log->info('Token received!');
         $this->log->debug($this->token);
-        $this->log->info('Retreiving account info');
+        $this->log->info('Retrieving account info');
+        $r = $this->get_login_info();
+        $this->identities['account_id'] = $r['visibility']['Id'];
+        $this->identities['name'] = $r['Name'];
+        $this->log->info("Received name: " . $r['Name'] . " (". $r['visibility']['Visible_Account__r']['Identity_number__c'].")");
+        $this->log->debug("Account_id: " . $this->identities['account_id']);
+
+        $file = fopen($this->SESSION_FILE,  "w+");
+        fwrite($file, json_encode($this->jar->toArray()));
+        fclose($file);
+        $this->log->debug("Saving session");
+        $this->save_access();;
 
 
-        file_put_contents('file.html', $rContents);
+        //file_put_contents('file.html', $rContents);
 
     }
 
@@ -224,14 +249,15 @@ class Edistribucion
         return $response;
     }
 
-    public function check_tokens()
+    public function check_tokens(): bool
     {
-        return false;
+        $this->log->debug("Checking tokens");
+        return $this->token != 'undefined' && $this->access_date->modify("+10 minutes") > new DateTime("NOW");
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return "Hola";
+        return "to string...";
     }
 
     private function save_access()
@@ -243,9 +269,9 @@ class Edistribucion
         $t['context'] = $this->context;
         $t['date'] = $date->format("Y-m-d H:i:s");
 
-        serialize($t);
-
-        file_put_contents($this->ACCESS_FILE, serialize($t));
+        $file = fopen($this->ACCESS_FILE, "w+");
+        fwrite($file, serialize($t));
+        fclose($file);
         $this->log->info('Saving access to file');
     }
 
@@ -271,12 +297,101 @@ class Edistribucion
             $command = $action->getCommand();
         }
 
-        return $this->command("other.{command}=1", $data);
+        return $this->command("other.{command}=1", ['data' => $data]);
     }
 
-    private function command()
+    /**
+     * @param $command
+     * @param $options
+     * @return mixed|string
+     * @throws \Exception
+     */
+    private function command($command, $options)
     {
 
+        $default = [
+            'data' => null,
+            'dashboard' => null,
+            'accept' => '*/*',
+            'content_type' => null,
+            'recursive' => false,
+        ];
+
+        $data = (array_key_exists("data", $options) && !empty($options['data'])) ? $options['data'] : $default['data'];
+        $dashboard = (array_key_exists("dashboard", $options) && !empty($options['dashboard'])) ? $options['dashboard'] : $default['dashboard'];
+        $accept = (array_key_exists("accept", $options) && !empty($options['accept'])) ? $options['accept'] : $default['accept'];
+        $content_type = (array_key_exists("content_type", $options) && !empty($options['content_type'])) ? $options['content_type'] : $default['content_type'];
+        $recursive = (array_key_exists("recursive", $options) && !empty($options['recursive'])) ? $options['recursive'] : $default['recursive'];
+        $headers = [];
+
+        if (!$dashboard){
+            $dashboard = $this->dashboard;
+        }
+
+        if ($this->command_index){
+            $command = "r=" . $this->command_index . "&";
+            $this->command_index  += 1;
+        }
+
+        $this->log->info("Preparing command: ". $command);
+
+        if ($data) {
+            $data['aura.context'] = $this->context;
+            $data['aura.pageURI'] = '/areaprivada/s/wp-online-access';
+            $data['aura.token'] = $this->token;
+            $this->log->debug("POST DATA: " . json_encode($data));
+        }
+
+        $this->log->debug("Dashboard: ". $dashboard);
+
+        if ($accept){
+            $this->log->debug("Accept: " . $accept);
+            $headers['Accept'] = $accept;
+        }
+
+        if ($content_type) {
+            $this->log->debug("Content-type: " . $content_type);
+            $headers['Content-Type'] = $content_type;
+        }
+
+        $r = $this->get_url($dashboard.$command, [
+            "method" => "POST",
+            "data" => $data,
+            "headers" => $headers,
+        ]);
+
+        $rText = $r->getBody()->getContents();
+        $rHeaderContent = $r->getHeader("Content-Type");
+
+        if (str_contains($rText, "window.location.href") || str_contains($rText, "clientOutOfSync")) {
+            if (!$recursive){
+                $this->log->info("Redirection received. Fetching credentials again");
+                $this->session = $_SESSION;
+                $this->force_login();
+                $options['recursive'] = true;
+                $this->command($command, $options);
+            } else {
+                $this->log->warning("Redirection received twice. Aborting command.");
+            }
+        }
+
+        if (str_contains($rHeaderContent[0], "json")){
+            $jr = json_decode($rText, true);
+            if ($jr['actions'][0]['state'] != "SUCCESS") {
+                if (!$recursive) {
+                    $this->log->info("Error received. Fetching credentials again");
+                    $this->session = $_SESSION;;
+                    $this->force_login();
+                    $options['recursive'] = true;
+                    $this->command($command, $options);
+                } else {
+                    $this->log->warning("Error received twice. Aborting command.");
+                    throw new \Exception("Error procesing command: //TODO message");
+                }
+            }
+            return $jr['actions'][0]['returnValue'];
+        }
+        return $rText;
     }
 
 }

@@ -2,4 +2,5 @@ composer.phar
 /api/vendor/
 /.idea/
 .env
-
+**/**.access
+**/**.session
