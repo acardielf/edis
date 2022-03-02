@@ -2,3 +2,4 @@ composer.phar
 /api/vendor/
 /.idea/
 .env
+
