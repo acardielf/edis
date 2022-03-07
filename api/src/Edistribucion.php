@@ -8,6 +8,7 @@ use Edistribucion\EdisError;
 use Edistribucion\EdistribucionMessageAction;
 use Edistribucion\UrlError;
 use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\SetCookie;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\RequestOptions;
@@ -48,7 +49,7 @@ class Edistribucion
         ]);
         $this->SESSION_FILE = "edistribucion.session";
         $this->ACCESS_FILE = "edistribucion.access";
-        $this->session = null;
+        $this->session = $this->jar->toArray();
         $this->token = "undefined";
         $this->credentials = [];
         $this->dashboard = "https://zonaprivada.edistribucion.com/areaprivada/s/sfsites/aura?";
@@ -57,7 +58,44 @@ class Edistribucion
         $this->appInfo = null;
         $this->context = null;
         $this->access_date = new DateTime("now");
+        $this->processSessionFile();
+        $this->processAccessFile();
+    }
 
+    private function processSessionFile()
+    {
+        try {
+            if (file_exists($this->SESSION_FILE)) {
+                $sessions = unserialize(file_get_contents($this->SESSION_FILE));
+                foreach ($sessions as $sesion){
+                    $this->jar->setCookie(new SetCookie($sesion));
+                }
+
+                $this->jar = $sessions;
+            } else {
+                $this->log->warning("Access file not found");
+            }
+        } catch (\Exception $e){
+            $this->log->warning("Session file not found");
+        }
+    }
+
+    private function processAccessFile()
+    {
+        try  {
+            if (file_exists($this->ACCESS_FILE)) {
+                $access = unserialize(file_get_contents($this->ACCESS_FILE));
+                $this->token = $access['token'];
+                $this->identities = $access['identities'];
+                $this->context = $access['context'];
+                $this->access_date = new DateTime($access['date']);
+            } else {
+                $this->log->warning("Access file not found");
+            }
+
+        } catch (\Exception $e){
+            $this->log->warning("Access file not found");
+        }
     }
 
     public function login(string $username, string $password)
@@ -176,13 +214,11 @@ class Edistribucion
         $this->log->debug("Account_id: " . $this->identities['account_id']);
 
         $file = fopen($this->SESSION_FILE,  "w+");
-        fwrite($file, json_encode($this->jar->toArray()));
+        fwrite($file, serialize($this->jar->toArray()));
         fclose($file);
+        chmod($this->SESSION_FILE, 0700);
         $this->log->debug("Saving session");
         $this->save_access();;
-
-
-        //file_put_contents('file.html', $rContents);
 
     }
 
@@ -272,6 +308,7 @@ class Edistribucion
         $file = fopen($this->ACCESS_FILE, "w+");
         fwrite($file, serialize($t));
         fclose($file);
+        chmod($this->ACCESS_FILE, 0700);
         $this->log->info('Saving access to file');
     }
 
@@ -392,6 +429,17 @@ class Edistribucion
             return $jr['actions'][0]['returnValue'];
         }
         return $rText;
+    }
+
+    public function get_cups(){
+        $action = new EdistribucionMessageAction(
+            270,
+            "WP_ContadorICP_F2_CTRL/ACTION\$getCUPSReconectarICP",
+            "WP_Reconnect_ICP",
+            ["visSelected" => $this->identities['account_id']]
+        );
+
+        return $this->run_action_command($action);
     }
 
 }
