@@ -38,7 +38,7 @@ class Edistribucion
     private string $password;
     private $jar;
 
-    public function __construct()
+    public function __construct(string $username, string $password)
     {
         $this->jar = new SessionCookieJar('CookieJar', true);
         $this->log = new Logger('name');
@@ -47,8 +47,10 @@ class Edistribucion
             'base_uri' => "https://zonaprivada.edistribucion.com/",
             'cookies' => $this->jar
         ]);
-        $this->SESSION_FILE = "edistribucion.session";
-        $this->ACCESS_FILE = "edistribucion.access";
+        $this->username = $username;
+        $this->password = $password;
+        $this->SESSION_FILE = sys_get_temp_dir() . sprintf("edistribucion.%s.session", $this->username);
+        $this->ACCESS_FILE = sys_get_temp_dir() . sprintf("edistribucion.%s.access", $this->username);
         $this->session = $this->jar->toArray();
         $this->token = "undefined";
         $this->credentials = [];
@@ -60,6 +62,7 @@ class Edistribucion
         $this->access_date = new DateTime("now");
         $this->processSessionFile();
         $this->processAccessFile();
+        $this->login();
     }
 
     private function processSessionFile()
@@ -98,11 +101,9 @@ class Edistribucion
         }
     }
 
-    public function login(string $username, string $password)
+    public function login()
     {
         $this->log->info("Logging...");
-        $this->username = $username;
-        $this->password = $password;
         if (!$this->check_tokens()) {
             $this->session = "";
             return $this->force_login();

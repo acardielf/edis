@@ -14,8 +14,7 @@ $dotenv->required('EDIS_PASSWORD');
 
 echo "API PARA USUARIO " . $_ENV['EDIS_USER'] . PHP_EOL;
 
-$api = new Edistribucion();
-$api->login($_ENV['EDIS_USER'],$_ENV['EDIS_PASSWORD']);
+$api = new Edistribucion($_ENV['EDIS_USER'],$_ENV['EDIS_PASSWORD']);
 var_dump($api->get_cups());
 
 
