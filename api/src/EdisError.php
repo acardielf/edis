@@ -1,6 +1,7 @@
 <?php
 namespace Edistribucion;
 
+use Exception;
 use Throwable;
 
 class EdisError extends Exception

@@ -16,6 +16,7 @@
         "monolog/monolog": "^2.3",
         "guzzlehttp/guzzle": "^7.4",
         "ext-http": "*",
-        "vlucas/phpdotenv": "^5.4"
+        "vlucas/phpdotenv": "^5.4",
+      "ext-dom": "*"
     }
 }

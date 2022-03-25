@@ -2,15 +2,15 @@
 
 namespace Edistribucion;
 
-class EdistribucionMessageAction
+abstract class EdisActionGeneric
 {
 
     private int $id;
-    private $descriptor;
-    private $callingDescriptor;
-    private $params;
+    private string $descriptor;
+    private string $callingDescriptor;
+    private array $params;
     private array $extras;
-    private $command;
+    private string $command;
 
     public function __construct(int $id, $descriptor, $callingDescriptor, $params, $extras = [])
     {
@@ -29,9 +29,11 @@ class EdistribucionMessageAction
             "callingDescriptor" => $this->getCallingDescriptor(),
             "params" => $this->params
         ];
-        if (!empty($this->extras)) {
-            //$this->update($this->extras);
+
+        foreach ($this->extras as $extra => $value) {
+            //$data[$extra] = $value;
         }
+
         return json_encode($data,JSON_UNESCAPED_SLASHES);
     }
 
