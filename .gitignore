@@ -1,6 +1,9 @@
 composer.phar
 /vendor/
+/vendor
+/.idea
 .env
 **/**.access
 **/**.session
 api/logger.log
+**.log
