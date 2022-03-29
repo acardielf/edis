@@ -1,24 +1,5 @@
 FROM php:8.0-apache
 
-RUN apt update \
-        && apt install -y \
-            g++ \
-            libicu-dev \
-            libpq-dev \
-            libzip-dev \
-            zip \
-            zlib1g-dev \
-        && docker-php-ext-install \
-            intl \
-            opcache \
-            pdo \
-            pdo_pgsql \
-            pgsql
-
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-RUN chmod +x /usr/local/bin/install-php-extensions && sync && install-php-extensions http
-
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 WORKDIR /var/www/src
