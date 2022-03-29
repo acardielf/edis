@@ -1,4 +1,4 @@
-# edistribucion\edistribucion
+# Edis for e-distribucion
 
 A PHP package (based on https://github.com/trocotronic/edistribucion) for use in PHP projects to access data from e-distribucion private area.  
 
