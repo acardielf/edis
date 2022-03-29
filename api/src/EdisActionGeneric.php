@@ -31,7 +31,7 @@ abstract class EdisActionGeneric
         ];
 
         foreach ($this->extras as $extra => $value) {
-            //$data[$extra] = $value;
+            $data[$extra] = $value;
         }
 
         return json_encode($data,JSON_UNESCAPED_SLASHES);

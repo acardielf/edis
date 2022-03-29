@@ -14,4 +14,6 @@ class GetCups extends EdisActionGeneric
         $extras = [];
         parent::__construct($id, $descriptor, $callingDescriptor, $params, $extras);
     }
+
+
 }
