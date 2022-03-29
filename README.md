@@ -45,10 +45,10 @@ There're many things to do... maybe never will be get all of them. For have a pu
 * Testing: This code hasn't been developed using DDD paradigm and have not any automatic testing.
  
 
-###About this project
+### About this project
 This project is part of the main bachelor's degree final project for TI Engineering for the Universitat Overta de Catalunya UOC. Therefore, this project is exclusively for academic purposes.
 
-###Thanks
+### Thanks
 Thanks to @trocotronic, @duhow, @polhenarejos and rest for their contribution and for open me the way
 
 ### DISCLAIMER
