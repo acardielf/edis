@@ -1,12 +1,15 @@
 {
     "name": "edistribucion/edistribucion",
+    "type": "library",
     "description": "A PHP package for use in PHP projects to access data from e-distribucion private area",
     "autoload": {
         "psr-4": {
             "Edistribucion\\": "src/"
         }
     },
-    "homepage": "https://github.com/ancafe/edistribucion-api",
+    "keywords": ["power","api","spanish","endesa","e-distribucion"],
+    "homepage": "https://github.com/ancafe/edis",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Ángel Cardiel",
@@ -15,9 +18,11 @@
     ],
     "require": {
         "monolog/monolog": "^2.3",
-        "guzzlehttp/guzzle": "^7.4",
+        "guzzlehttp/guzzle": "^7.4"
+    },
+    "require-dev": {
         "ext-http": "*",
         "vlucas/phpdotenv": "^5.4",
-      "ext-dom": "*"
+        "ext-dom": "*"
     }
 }
