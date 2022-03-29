@@ -4,13 +4,13 @@ services:
   api:
     container_name: edis
     build:
-      context: ./docker
+      context: docker
       args:
         - WITH_XDEBUG=true
     env_file: .env
     ports:
       - '8081:80'
     volumes:
-      - ./api:/var/www/src
+      - ./:/var/www/src
       - ./docker/apache-default.conf:/etc/apache2/sites-enabled/000-default.conf
       - ./docker/php.ini:/usr/local/etc/php/php.ini
