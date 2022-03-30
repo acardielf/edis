@@ -4,7 +4,7 @@
     "description": "A PHP package for use in PHP projects to access data from e-distribucion private area",
     "autoload": {
         "psr-4": {
-            "Edistribucion\\": "../src/"
+            "Edistribucion\\": "src"
         }
     },
     "keywords": ["power","api","spanish","endesa","e-distribucion"],

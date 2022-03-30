@@ -7,3 +7,4 @@ composer.phar
 **/**.session
 api/logger.log
 **.log
+.idea
