@@ -84,9 +84,7 @@ trait Files
 
     private function save_session_file()
     {
-        $file = fopen($this->file_session_path, "w+");
-        fwrite($file, serialize($this->jar->toArray()));
-        fclose($file);
+        file_put_contents($this->file_session_path, serialize($this->jar->toArray()));
         chmod($this->file_session_path, 0700);
         $this->log->debug("Saving session");
     }
@@ -100,9 +98,7 @@ trait Files
         $t['context'] = $this->context;
         $t['date'] = $date->format("Y-m-d H:i:s");
 
-        $file = fopen($this->file_access_path, "w+");
-        fwrite($file, serialize($t));
-        fclose($file);
+        file_put_contents($this->file_access_path, serialize($t));
         chmod($this->file_access_path, 0700);
         $this->log->info('Saving access to file');
     }

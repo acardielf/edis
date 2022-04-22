@@ -22,12 +22,15 @@
 
 namespace Edistribucion\Traits;
 
+use DateTime;
 use Edistribucion\Actions as Actions;
+use Exception;
 
-trait ActionsDefinition {
+trait ActionsDefinition
+{
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_cups(): string|array
     {
@@ -37,7 +40,7 @@ trait ActionsDefinition {
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_cups_info(string $cupsId): string|array
     {
@@ -47,7 +50,7 @@ trait ActionsDefinition {
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_meter(string $cupsId): string|array
     {
@@ -57,7 +60,7 @@ trait ActionsDefinition {
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_all_cups(): string|array
     {
@@ -67,7 +70,7 @@ trait ActionsDefinition {
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_cups_detail(string $cupsId): string|array
     {
@@ -80,7 +83,7 @@ trait ActionsDefinition {
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_cups_status(string $cupsId): string|array
     {
@@ -90,7 +93,7 @@ trait ActionsDefinition {
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_atr_detail(string $atrId): string|array
     {
@@ -100,7 +103,7 @@ trait ActionsDefinition {
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_solicitud_atr_detail(string $solId): string|array
     {
@@ -114,7 +117,7 @@ trait ActionsDefinition {
      * En caso de que habiendo activado el ICP sigas sin tener suministro,
      * llama a Averías 900 850 840
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function reconnect_ICP(string $cupsId): string|array
     {
@@ -129,7 +132,7 @@ trait ActionsDefinition {
 
     /**
      * @return string|array
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_list_cups(): string|array
     {
@@ -142,7 +145,7 @@ trait ActionsDefinition {
      * @param string $contId
      *
      * @return string|array
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_list_cycles(string $contId): string|array
     {
@@ -157,7 +160,7 @@ trait ActionsDefinition {
      * @param string $cycleValue
      *
      * @return string|array
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_meas(string $contId, string $cycleLabel, string $cycleValue): string|array
     {
@@ -174,11 +177,11 @@ trait ActionsDefinition {
      * @param string $contId
      *
      * @return string|array
-     * @throws \Exception
+     * @throws Exception
      */
     public function get_measure(string $contId): string|array
     {
-        $yesterday = new \DateTime('yesterday');
+        $yesterday = new DateTime('yesterday');
         return $this->run_action_command(
             new Actions\GetMeasure([
                 "contId" => $contId,
@@ -192,23 +195,43 @@ trait ActionsDefinition {
      * @param string $contId
      *
      * @return string|array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function get_maximeter(string $contId): string|array
+    public function get_maximeter(string $contId, DateTime $startDate, DateTime $endDate): string|array
     {
-        //TODO: Program this vars playing with tempo
         return $this->run_action_command(
             new Actions\GetMaximeter([
                 "mapParams" => [
-                    "startDate" => "2/2021",
-                    "endDate" => "2/2022",
+                    "startDate" => $startDate->format("Y-m-d"),
+                    "endDate" => $endDate->format("Y-m-d"),
                     "id" => "******",
-                    "sIdentificador" =>"*****"
+                    "sIdentificador" => "*****"
                 ]
             ])
         );
     }
 
+    /**
+     * @param string $contId
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public function get_meas_interval(string $contId, DateTime $startDate, DateTime $endDate): array|string
+    {
+        return $this->run_action_command(
+            new Actions\GetMeasInterval([
+                "mapParams" => [
+                    "startDate" => $startDate->format("Y-m-d"),
+                    "endDate" => $endDate->format("Y-m-d"),
+                    "type" => 4,
+                    "contId" => $contId
+                ]
+            ])
+        );
+    }
 
 
 }

@@ -50,5 +50,6 @@ var_dump($edis->get_cups());
 //var_dump($edis->get_list_cups($homeCups));
 //var_dump($edis->get_list_cycles($homeCups));
 //var_dump($edis->get_meas($homeCups, "24/01/2022 - 20/02/2022", "*****"));
+//var_dump($edis->get_meas_interval($homeCups, "24/01/2022","20/02/2022"));
 //var_dump($edis->get_measure($homeCups));
 //var_dump($edis->get_maximeter($homeCups));
