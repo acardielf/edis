@@ -67,8 +67,8 @@ class EdisClient
         $this->username = $username;
         $this->password = $password;
 
-        $this->file_session_path = EdisConfigStatic::STORE_PATH . sprintf("edistribucion.%s.session", $this->username);
-        $this->file_access_path = EdisConfigStatic::STORE_PATH . sprintf("edistribucion.%s.access", $this->username);
+        $this->file_session_path = sys_get_temp_dir() . sprintf("edistribucion.%s.session", $this->username);
+        $this->file_access_path = sys_get_temp_dir() . sprintf("edistribucion.%s.access", $this->username);
 
         $this->dashboard = EdisConfigStatic::EDIS_AREAPRIVADA_BASE . EdisConfigStatic::EDIS_DASHBOARD;
         $this->access_date = new DateTime("now");
