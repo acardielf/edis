@@ -30,6 +30,16 @@ trait ActionsDefinition
 {
 
     /**
+     * @throws \Exception
+     */
+    public function get_login_info(): string|array
+    {
+        return $this->run_action_command(
+            new Actions\GetLoginInfo()
+        );
+    }
+
+    /**
      * @throws Exception
      */
     public function get_cups(): string|array

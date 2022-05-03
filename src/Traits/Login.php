@@ -162,14 +162,6 @@ trait Login
         return $this->token && $this->access_date->modify("+10 minutes") > new \DateTime("NOW");
     }
 
-    /**
-     * @throws \Exception
-     */
-    private function get_login_info(): string|array
-    {
-        $action = new Actions\GetLoginInfo();
-        return $this->run_action_command($action);
-    }
 
     public function getTagFromHTML(string $tag, string $html): \DOMNodeList
     {
