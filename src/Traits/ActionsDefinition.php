@@ -216,12 +216,10 @@ trait ActionsDefinition {
     public function get_meas_interval(string $contId, DateTime $startDate, DateTime $endDate): array|string {
         return $this->run_action_command(
             new Actions\GetMeasInterval([
-                "mapParams" => [
-                    "startDate" => $startDate->format("Y-m-d"),
-                    "endDate" => $endDate->format("Y-m-d"),
-                    "type" => 4,
-                    "contId" => $contId
-                ]
+                "startDate" => $startDate->format("Y-m-d"),
+                "endDate" => $endDate->format("Y-m-d"),
+                "type" => 4,
+                "contId" => $contId
             ])
         );
     }
