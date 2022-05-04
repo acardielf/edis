@@ -26,14 +26,12 @@ use DateTime;
 use Edistribucion\Actions as Actions;
 use Exception;
 
-trait ActionsDefinition
-{
+trait ActionsDefinition {
 
     /**
      * @throws \Exception
      */
-    public function get_login_info(): string|array
-    {
+    public function get_login_info(): string|array {
         return $this->run_action_command(
             new Actions\GetLoginInfo()
         );
@@ -42,8 +40,7 @@ trait ActionsDefinition
     /**
      * @throws Exception
      */
-    public function get_cups(): string|array
-    {
+    public function get_cups(): string|array {
         return $this->run_action_command(
             new Actions\GetCups(["visSelected" => $this->identities['account_id']])
         );
@@ -52,8 +49,7 @@ trait ActionsDefinition
     /**
      * @throws Exception
      */
-    public function get_cups_info(string $cupsId): string|array
-    {
+    public function get_cups_info(string $cupsId): string|array {
         return $this->run_action_command(
             new Actions\GetCupsStatus(["cupsId" => $cupsId])
         );
@@ -62,8 +58,7 @@ trait ActionsDefinition
     /**
      * @throws Exception
      */
-    public function get_meter(string $cupsId): string|array
-    {
+    public function get_meter(string $cupsId): string|array {
         return $this->run_action_command(
             new Actions\GetMeter(["cupsId" => $cupsId])
         );
@@ -72,8 +67,7 @@ trait ActionsDefinition
     /**
      * @throws Exception
      */
-    public function get_all_cups(): string|array
-    {
+    public function get_all_cups(): string|array {
         return $this->run_action_command(
             new Actions\GetAllCups(["visSelected" => $this->identities['account_id']])
         );
@@ -82,10 +76,9 @@ trait ActionsDefinition
     /**
      * @throws Exception
      */
-    public function get_cups_detail(string $cupsId): string|array
-    {
+    public function get_cups_detail(string $cupsId): string|array {
         return $this->run_action_command(
-            new Actions\GetAtrDetail([
+            new Actions\GetCupsDetail([
                 "visSelected" => $this->identities['account_id'],
                 "cupsId" => $cupsId
             ])
@@ -95,8 +88,7 @@ trait ActionsDefinition
     /**
      * @throws Exception
      */
-    public function get_cups_status(string $cupsId): string|array
-    {
+    public function get_cups_status(string $cupsId): string|array {
         return $this->run_action_command(
             new Actions\GetCupsStatus(["cupsId" => $cupsId])
         );
@@ -105,8 +97,7 @@ trait ActionsDefinition
     /**
      * @throws Exception
      */
-    public function get_atr_detail(string $atrId): string|array
-    {
+    public function get_atr_detail(string $atrId): string|array {
         return $this->run_action_command(
             new Actions\GetAtrDetail(["atrId" => $atrId])
         );
@@ -115,8 +106,7 @@ trait ActionsDefinition
     /**
      * @throws Exception
      */
-    public function get_solicitud_atr_detail(string $solId): string|array
-    {
+    public function get_solicitud_atr_detail(string $solId): string|array {
         return $this->run_action_command(
             new Actions\GetSolicitudAtrDetail(["solId" => $solId])
         );
@@ -129,8 +119,7 @@ trait ActionsDefinition
      *
      * @throws Exception
      */
-    public function reconnect_ICP(string $cupsId): string|array
-    {
+    public function reconnect_ICP(string $cupsId): string|array {
         $r = $this->run_action_command(
             new Actions\ReconnectICPDetail(["cupsId" => $cupsId])
         );
@@ -144,8 +133,7 @@ trait ActionsDefinition
      * @return string|array
      * @throws Exception
      */
-    public function get_list_cups(): string|array
-    {
+    public function get_list_cups(): string|array {
         return $this->run_action_command(
             new Actions\GetMeasure(["sIdentificador" => $this->identities['account_id']])
         );
@@ -157,8 +145,7 @@ trait ActionsDefinition
      * @return string|array
      * @throws Exception
      */
-    public function get_list_cycles(string $contId): string|array
-    {
+    public function get_list_cycles(string $contId): string|array {
         return $this->run_action_command(
             new Actions\GetMeas(["contId" => $contId])
         );
@@ -172,8 +159,7 @@ trait ActionsDefinition
      * @return string|array
      * @throws Exception
      */
-    public function get_meas(string $contId, string $cycleLabel, string $cycleValue): string|array
-    {
+    public function get_meas(string $contId, string $cycleLabel, string $cycleValue): string|array {
         return $this->run_action_command(
             new Actions\GetMeas([
                 "cupsId" => $contId,
@@ -189,8 +175,7 @@ trait ActionsDefinition
      * @return string|array
      * @throws Exception
      */
-    public function get_measure(string $contId): string|array
-    {
+    public function get_measure(string $contId): string|array {
         $yesterday = new DateTime('yesterday');
         return $this->run_action_command(
             new Actions\GetMeasure([
@@ -207,8 +192,7 @@ trait ActionsDefinition
      * @return string|array
      * @throws Exception
      */
-    public function get_maximeter(string $contId, DateTime $startDate, DateTime $endDate): string|array
-    {
+    public function get_maximeter(string $contId, DateTime $startDate, DateTime $endDate): string|array {
         return $this->run_action_command(
             new Actions\GetMaximeter([
                 "mapParams" => [
@@ -229,8 +213,7 @@ trait ActionsDefinition
      * @return array|string
      * @throws Exception
      */
-    public function get_meas_interval(string $contId, DateTime $startDate, DateTime $endDate): array|string
-    {
+    public function get_meas_interval(string $contId, DateTime $startDate, DateTime $endDate): array|string {
         return $this->run_action_command(
             new Actions\GetMeasInterval([
                 "mapParams" => [
@@ -242,6 +225,4 @@ trait ActionsDefinition
             ])
         );
     }
-
-
 }
