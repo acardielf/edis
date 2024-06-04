@@ -21,7 +21,7 @@ trait GetUrl {
 
         $options = array_merge($default, $options);
         if ($options['data']) {
-            $options['query'] = http_build_query($options['data'], null, "&");
+            $options['query'] = http_build_query($options['data'], "", "&");
         }
 
         $request = new Request($options['method'], $url, $options['headers']);

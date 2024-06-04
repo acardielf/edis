@@ -5,6 +5,7 @@ namespace Edistribucion\Traits;
 use Edistribucion\Actions as Actions;
 use Edistribucion\EdisConfigStatic;
 use Edistribucion\EdisError;
+use Exception;
 
 trait Login
 {
@@ -18,7 +19,7 @@ trait Login
 
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function login(): bool
     {
@@ -33,7 +34,7 @@ trait Login
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function force_login($recursive = false): bool
     {
@@ -87,7 +88,6 @@ trait Login
             ],
         ])->getBody()->getContents();
 
-
         if (str_contains($response, "/*ERROR*/")) {
             if (str_contains($response, "invalidSession") && !$recursive) {
                 $this->jar->clear();
@@ -100,10 +100,9 @@ trait Login
 
         $json = json_decode($response, true);
 
-        if (!array_key_exists('events', $json)) {
+        if (!array_key_exists('events', $json ?? [])) {
             throw new EdisError("Wrong login response. Cannot continue");
         }
-
 
         //Accessing to frontdoor
         $this->log->info('Accessing to frontdoor:');
@@ -124,8 +123,7 @@ trait Login
         $ed = strpos($response, ";", $ix);
         $json = json_decode(substr($response, $ix, $ed - $ix), true);
 
-
-        if (!array_key_exists('token', $json)) {
+        if (!array_key_exists('token', $json ?? [])) {
             throw new EdisError("Wrong login response. Cannot continue");
         }
 

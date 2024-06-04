@@ -1,28 +1,34 @@
 {
-    "name": "edistribucion/edistribucion",
-    "type": "library",
-    "description": "A PHP package for use in PHP projects to access data from e-distribucion private area",
-    "autoload": {
-        "psr-4": {
-            "Edistribucion\\": "src"
-        }
-    },
-    "keywords": ["power","api","spanish","endesa","e-distribucion"],
-    "homepage": "https://github.com/ancafe/edis",
-    "license": "GPL-3.0-or-later",
-    "authors": [
-        {
-            "name": "Ángel Cardiel",
-            "email": "angel.cardiel@protonmail.com"
-        }
-    ],
-    "require": {
-        "monolog/monolog": "^2.3",
-        "guzzlehttp/guzzle": "^7.4"
-    },
-    "require-dev": {
-        "ext-http": "*",
-        "vlucas/phpdotenv": "^5.4",
-        "ext-dom": "*"
+  "name": "edistribucion/edistribucion",
+  "type": "library",
+  "description": "A PHP package for use in PHP projects to access data from e-distribucion private area",
+  "autoload": {
+    "psr-4": {
+      "Edistribucion\\": "src"
     }
+  },
+  "keywords": [
+    "power",
+    "api",
+    "spanish",
+    "endesa",
+    "e-distribucion"
+  ],
+  "homepage": "https://github.com/ancafe/edis",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Ángel Cardiel",
+      "email": "angel.cardiel@protonmail.com"
+    }
+  ],
+  "require": {
+    "monolog/monolog": "^2.3",
+    "guzzlehttp/guzzle": "^7.4",
+    "ext-dom": "*"
+  },
+  "require-dev": {
+    "ext-http": "*",
+    "vlucas/phpdotenv": "^5.4"
+  }
 }

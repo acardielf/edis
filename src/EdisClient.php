@@ -49,6 +49,9 @@ class EdisClient
     private Client $client;
     private Logger $log;
 
+    private mixed $context;
+    private mixed $appInfo;
+
 
     /**
      * @throws EdisError
