@@ -36,8 +36,8 @@ trait Command
         $options['dashboard'] = ($options['dashboard']) ?: $this->dashboard;
 
 
-        if ($this->command_index) {
-            $command = "r=" . $this->command_index . "&";
+        if ($this->command_index >= 0) {
+            $command = "r=" . $this->command_index . "&" . $command;
             $this->command_index++;
         }
 
@@ -74,7 +74,7 @@ trait Command
         if (str_contains($rText, "window.location.href") || str_contains($rText, "clientOutOfSync")) {
             if (!$recursive) {
                 $this->log->info("Redirection received. Fetching credentials again");
-                $this->jar->clear();
+                //$this->jar->clear();
                 $this->force_login(recursive: false);
                 $this->command($command, $options, true);
             } else {
@@ -85,7 +85,7 @@ trait Command
         if (str_contains($rHeaderContent[0], "json")) {
             if (str_contains($rText, "Invalid token")) {
                 if (!$recursive) {
-                    $this->jar->clear();
+                    //$this->jar->clear();
                     $this->token = $this->get_token();
                     $this->command($command, $options, true);
                 } else {
@@ -100,7 +100,7 @@ trait Command
                 if (!$recursive) {
                     $this->log->error("Error: " . $command);
                     $this->log->info("Error received. Fetching credentials again");
-                    $this->jar->clear();
+                    //$this->jar->clear();
                     $this->force_login(recursive: false);
                     $this->command($command, $options, true);
                 } else {
@@ -123,7 +123,7 @@ trait Command
     {
         $data = ['message' => '{"actions":[' . $action . ']}'];
         $command = ($command) ?: $action->getCommand();
-        return $this->command("other.{command}=1", ['data' => $data]);
+        return $this->command("other.$command=1", ['data' => $data]);
     }
 
 

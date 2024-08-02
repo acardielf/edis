@@ -163,7 +163,7 @@ trait ActionsDefinition
     public function get_list_cups(): string|array
     {
         return $this->run_action_command(
-            new Actions\GetMeasure([
+            new Actions\GetListCups([
                 "sIdentificador" => $this->identities['account_id']
             ])
         );
@@ -178,7 +178,7 @@ trait ActionsDefinition
     public function get_list_cycles(string $contId): string|array
     {
         return $this->run_action_command(
-            new Actions\GetMeas([
+            new Actions\GetListCycles([
                 "contId" => $contId
             ])
         );

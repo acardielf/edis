@@ -47,8 +47,9 @@ try {
     exit;
 }
 
-//var_dump($edis->get_cups());
-$cups = $edis->get_cups();
+//var_dump($edis->get_login_info());
+$cups = $edis->get_list_cups();
+//var_dump($cups);
 $homeCups = $cups['data']['lstCups'][0]['Id'];
 //var_dump($edis->get_cups_info($homeCups));
 //var_dump($edis->get_meter($homeCups));
@@ -64,12 +65,12 @@ $homeCups = $cups['data']['lstCups'][0]['Id'];
 //        cycleValue: "*****"
 //    )
 //);
-//var_dump(
-//    $edis->get_meas_interval(
-//        cups: $homeCups,
-//        startDate: DateTimeImmutable::createFromFormat("d/m/Y", "20/07/2024"),
-//        endDate: DateTimeImmutable::createFromFormat("d/m/Y", "30/07/2024")
-//    )
-//);
+var_dump(
+    $edis->get_meas_interval(
+        cups: $homeCups,
+        startDate: DateTimeImmutable::createFromFormat("d/m/Y", "20/07/2024"),
+        endDate: DateTimeImmutable::createFromFormat("d/m/Y", "30/07/2024")
+    )
+);
 //var_dump($edis->get_measure($homeCups));
 //var_dump($edis->get_maximeter($homeCups));
