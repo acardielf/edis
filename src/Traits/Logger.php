@@ -13,6 +13,4 @@ trait Logger
         $this->log = new \Monolog\Logger('EdisLog');
         $this->log->pushHandler(new StreamHandler(EdisConfigStatic::LOGGER_OUTPUT, EdisConfigStatic::LOGLEVEL));
     }
-
-
 }

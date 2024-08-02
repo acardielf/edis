@@ -1,16 +1,15 @@
-FROM php:8.3-apache
+FROM php:8.3-alpine
 
-RUN apt update \
-        && apt install -y \
-            g++ \
-            libicu-dev \
-            libpq-dev \
-            libzip-dev \
-            zip \
-            zlib1g-dev \
-        && docker-php-ext-install \
-            intl \
-            opcache
+RUN apk add --no-cache --update \
+    g++ \
+    $PHPIZE_DEPS \
+    icu-dev \
+    linux-headers \
+    zip
+
+RUN docker-php-ext-install  \
+    intl \
+    opcache
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 

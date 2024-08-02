@@ -6,9 +6,8 @@ services:
       args:
         - WITH_XDEBUG=true
     env_file: .env
-    ports:
-      - '8081:80'
+    stdin_open: true # equivalent of -i
+    tty: true        # equivalent of -t
     volumes:
       - ./:/var/www/src
-      - ./docker/apache-default.conf:/etc/apache2/sites-enabled/000-default.conf
       - ./docker/php.ini:/usr/local/etc/php/php.ini

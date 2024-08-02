@@ -23,8 +23,8 @@
     }
   ],
   "require": {
-    "monolog/monolog": "^2.3",
-    "guzzlehttp/guzzle": "^7.4",
+    "monolog/monolog": "^3.0",
+    "guzzlehttp/guzzle": "^7.9",
     "mck89/peast": "dev-master",
     "ext-dom": "*"
   },

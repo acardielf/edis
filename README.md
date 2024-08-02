@@ -12,8 +12,11 @@ Developed and distributed under GPL-3.0 License and exclusively for academic pur
 
 1. Run `cp .env.dist .env` and edit with your details
 2. Run `docker compose up -d` for running in de-attached mode
-3. Run `docker exec -it edis bash` for enter in bash mode inside the container
-4. You should be able to run `php test/index.php` 
+3. Run `docker exec edis composer install` for enter in bash mode inside the container
+4. You should be able to run `php test/index.php`
+
+#### Connect to container: 
+1. Run `docker exec -it edis sh` for enter in bash mode inside the container 
 
 ### Usage 
 
