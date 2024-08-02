@@ -1,4 +1,5 @@
 <?php
+
 namespace Edistribucion\Actions;
 
 use Edistribucion\EdisActionGeneric;

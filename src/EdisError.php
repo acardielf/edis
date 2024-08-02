@@ -2,6 +2,7 @@
 namespace Edistribucion;
 
 use Exception;
+use ReturnTypeWillChange;
 use Throwable;
 
 class EdisError extends Exception
@@ -11,7 +12,7 @@ class EdisError extends Exception
         parent::__construct($message, $code, $previous);
     }
 
-    public function __toString() {
+    #[ReturnTypeWillChange] public function __toString() {
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 

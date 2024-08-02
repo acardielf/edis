@@ -6,7 +6,8 @@ use Edistribucion\EdisConfigStatic;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 
-trait GetUrl {
+trait GetUrl
+{
     private function get_url(string $url, $options = []): ResponseInterface
     {
         $default = [
@@ -25,7 +26,8 @@ trait GetUrl {
         }
 
         $request = new Request($options['method'], $url, $options['headers']);
-        $this->log->debug("==> Sending " . $request->getMethod() . " request to " . $request->getUri()->getPath(),
+        $this->log->debug(
+            "==> Sending " . $request->getMethod() . " request to " . $request->getUri()->getPath(),
             [
                 urldecode($request->getUri()->getQuery())
             ]

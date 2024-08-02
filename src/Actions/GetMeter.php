@@ -9,7 +9,7 @@ class GetMeter extends EdisActionGeneric
     public function __construct($params)
     {
         $id = 522;
-        $descriptor = "WP_ContadorICP_F2_CTRL/ACTION\$consultarContador";
+        $descriptor = "WP_ContadorICP_F2_CTRL/ACTION\$consultarContador2";
         $callingDescriptor = "WP_Reconnect_Detail";
         $extras = [];
 

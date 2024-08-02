@@ -27,6 +27,7 @@
  *  You are responsible for reviewing and testing any scripts you run thoroughly before use
  *  in any non-testing environment.
  */
+
 namespace Edistribucion;
 
 use DateTime;
@@ -78,9 +79,7 @@ class EdisClient
 
         $this->processSessionFile();
         $this->processAccessFile();
-
     }
-
 
 
 }

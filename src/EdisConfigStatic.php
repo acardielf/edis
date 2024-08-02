@@ -1,4 +1,5 @@
 <?php
+
 namespace Edistribucion;
 
 class EdisConfigStatic
@@ -40,7 +41,7 @@ class EdisConfigStatic
     const EDIS_AREAPRIVADA_BASE = "/areaprivada/s/";
     const EDIS_AREAPRIVADA_URL = 'login?ec=302&startURL=%2Fareaprivada%2Fs%2F';
     const EDIS_DASHBOARD = "sfsites/aura?";
-    const URL_EXECUTE_COMMAND = 'wp-online-access';
+    const URL_EXECUTE_COMMAND = '';
 
 
 }

@@ -8,7 +8,7 @@ use Monolog\Handler\StreamHandler;
 trait Logger
 {
 
-    public function createLogger()
+    public function createLogger(): void
     {
         $this->log = new \Monolog\Logger('EdisLog');
         $this->log->pushHandler(new StreamHandler(EdisConfigStatic::LOGGER_OUTPUT, EdisConfigStatic::LOGLEVEL));

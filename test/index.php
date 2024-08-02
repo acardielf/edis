@@ -31,6 +31,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Edistribucion\EdisClient;
+use Edistribucion\EdisError;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
@@ -38,10 +39,17 @@ $dotenv->safeLoad();
 $dotenv->required('EDIS_USER');
 $dotenv->required('EDIS_PASSWORD');
 
-$edis = new EdisClient($_ENV['EDIS_USER'],$_ENV['EDIS_PASSWORD']);
-$edis->login();
+try {
+    $edis = new EdisClient($_ENV['EDIS_USER'], $_ENV['EDIS_PASSWORD']);
+    $edis->login();
+} catch (EdisError|Exception $e) {
+    echo $e->getMessage();
+    exit;
+}
 
-var_dump($edis->get_cups());
+//var_dump($edis->get_cups());
+$cups = $edis->get_cups();
+$homeCups = $cups['data']['lstCups'][0]['Id'];
 //var_dump($edis->get_cups_info($homeCups));
 //var_dump($edis->get_meter($homeCups));
 //var_dump($edis->get_cups_detail($homeCups));
@@ -49,7 +57,19 @@ var_dump($edis->get_cups());
 //var_dump($edis->reconnect_ICP($homeCups));
 //var_dump($edis->get_list_cups($homeCups));
 //var_dump($edis->get_list_cycles($homeCups));
-//var_dump($edis->get_meas($homeCups, "24/01/2022 - 20/02/2022", "*****"));
-//var_dump($edis->get_meas_interval($homeCups, "24/01/2022","20/02/2022"));
+//var_dump(
+//    $edis->get_meas(
+//        cups: $homeCups,
+//        cycleLabel: "24/01/2024 - 20/02/2024",
+//        cycleValue: "*****"
+//    )
+//);
+//var_dump(
+//    $edis->get_meas_interval(
+//        cups: $homeCups,
+//        startDate: DateTimeImmutable::createFromFormat("d/m/Y", "20/07/2024"),
+//        endDate: DateTimeImmutable::createFromFormat("d/m/Y", "30/07/2024")
+//    )
+//);
 //var_dump($edis->get_measure($homeCups));
 //var_dump($edis->get_maximeter($homeCups));

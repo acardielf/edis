@@ -10,7 +10,7 @@ class GetCupsInfo extends EdisActionGeneric
     {
         $id = 489;
         $descriptor = "WP_ContadorICP_F2_CTRL/ACTION\$getCupsInfo";
-        $callingDescriptor = "WP_Reconnect_Detail";
+        $callingDescriptor = "WP_Reconnect_Detail_F2";
         $extras = [];
 
         parent::__construct($id, $descriptor, $callingDescriptor, $params, $extras);

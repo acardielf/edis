@@ -2,6 +2,7 @@
 
 namespace Edistribucion\Traits;
 
+use DateTime;
 use Edistribucion\EdisError;
 use GuzzleHttp\Cookie\SetCookie;
 
@@ -30,8 +31,6 @@ trait Files
         } catch (EdisError $exception) {
             throw new EdisError("Error processing file: " . $filepath);
         }
-
-
     }
 
     /**
@@ -55,6 +54,7 @@ trait Files
     /**
      * @return void
      * @throws EdisError
+     * @throws \Exception
      */
     private function processAccessFile(): void
     {
@@ -77,22 +77,22 @@ trait Files
         $this->token = $access['token'];
         $this->identities = $access['identities'];
         $this->context = $access['context'];
-        $this->access_date = new \DateTime($access['date']);
+        $this->access_date = new DateTime($access['date']);
         $this->log->info("Access details restored");
     }
 
 
-    private function save_session_file()
+    private function save_session_file(): void
     {
         file_put_contents($this->file_session_path, serialize($this->jar->toArray()));
         chmod($this->file_session_path, 0700);
         $this->log->debug("Saving session");
     }
 
-    private function save_access_file()
+    private function save_access_file(): void
     {
         $t = [];
-        $date = new \DateTime('now');
+        $date = new DateTime('now');
         $t['token'] = $this->token;
         $t['identities'] = $this->identities;
         $t['context'] = $this->context;
@@ -102,7 +102,6 @@ trait Files
         chmod($this->file_access_path, 0700);
         $this->log->info('Saving access to file');
     }
-
 
 
 }

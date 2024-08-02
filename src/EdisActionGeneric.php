@@ -34,51 +34,51 @@ abstract class EdisActionGeneric
             $data[$extra] = $value;
         }
 
-        return json_encode($data,JSON_UNESCAPED_SLASHES);
+        return json_encode($data, JSON_UNESCAPED_SLASHES);
     }
 
-    public function add_field($key, $value)
+    public function add_field($key, $value): void
     {
         $this->extras[$key] = $value;
     }
 
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
 
-    public function getId()
+    public function getId(): string
     {
         return $this->id . ";a";
     }
 
-    public function setCommand()
+    public function setCommand(string $value): void
     {
-        $this->command = implode(explode("/ACTION$",$this->descriptor));
+        $this->command = implode(".", explode("/ACTION$", $value));
     }
 
-    public function getCommand()
+    public function getCommand(): string
     {
         return $this->command;
     }
 
-    public function setDescriptor($value)
+    public function setDescriptor($value): void
     {
         $this->descriptor = "apex://" . $value;
-        $this->setCommand();
+        $this->setCommand($value);
     }
 
-    public function getDescriptor()
+    public function getDescriptor(): string
     {
         return $this->descriptor;
     }
 
-    public function setCallingDescriptor($value)
+    public function setCallingDescriptor($value): void
     {
         $this->callingDescriptor = "markup://c:" . $value;
     }
 
-    public function getCallingDescriptor()
+    public function getCallingDescriptor(): string
     {
         return $this->callingDescriptor;
     }

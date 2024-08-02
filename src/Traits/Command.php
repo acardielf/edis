@@ -6,7 +6,8 @@ use Edistribucion\EdisActionGeneric;
 use Edistribucion\EdisConfigStatic;
 use Edistribucion\EdisError;
 
-trait Command {
+trait Command
+{
 
     private int $command_index = 1;
     private string $dashboard;
@@ -74,31 +75,44 @@ trait Command {
             if (!$recursive) {
                 $this->log->info("Redirection received. Fetching credentials again");
                 $this->jar->clear();
-                $this->force_login(true);
+                $this->force_login(recursive: false);
                 $this->command($command, $options, true);
             } else {
                 $this->log->warning("Redirection received twice. Aborting command.");
             }
         }
 
-        if (!str_contains($rHeaderContent[0], "json")) {
-            return $rText;
-        }
-
-        $jr = json_decode($rText, true);
-        if ($jr['actions'][0]['state'] != "SUCCESS") {
-            if (!$recursive) {
-                $this->log->error("Error: " . $command);
-                $this->log->info("Error received. Fetching credentials again");
-                $this->force_login(true);
-                $this->command($command, $options, true);
-            } else {
-                $this->log->warning("Error received twice. Aborting command.");
-                throw new EdisError("Error processing command.");
+        if (str_contains($rHeaderContent[0], "json")) {
+            if (str_contains($rText, "Invalid token")) {
+                if (!$recursive) {
+                    $this->jar->clear();
+                    $this->token = $this->get_token();
+                    $this->command($command, $options, true);
+                } else {
+                    $this->log->warning("Token expired. Cannot refresh");
+                    throw new EdisError("Token expired. Cannot refresh");
+                }
             }
-        }
-        return $jr['actions'][0]['returnValue'];
 
+            $jr = json_decode($rText, true);
+
+            if ($jr['actions'][0]['state'] != "SUCCESS") {
+                if (!$recursive) {
+                    $this->log->error("Error: " . $command);
+                    $this->log->info("Error received. Fetching credentials again");
+                    $this->jar->clear();
+                    $this->force_login(recursive: false);
+                    $this->command($command, $options, true);
+                } else {
+                    $this->log->warning("Error received twice. Aborting command.");
+                    throw new EdisError("Error processing command.");
+                }
+            }
+
+            return $jr['actions'][0]['returnValue'];
+        }
+
+        return $rText;
     }
 
 
