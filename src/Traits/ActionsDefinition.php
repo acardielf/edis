@@ -25,6 +25,7 @@ namespace Edistribucion\Traits;
 use DateTime;
 use DateTimeImmutable;
 use Edistribucion\Actions as Actions;
+use Edistribucion\Models\CUPS;
 use Exception;
 
 trait ActionsDefinition
@@ -157,16 +158,32 @@ trait ActionsDefinition
     }
 
     /**
-     * @return string|array
+     * @return array<CUPS>
      * @throws Exception
      */
-    public function get_list_cups(): string|array
+    public function get_list_cups(): array
     {
-        return $this->run_action_command(
+        $response = $this->run_action_command(
             new Actions\GetListCups([
                 "sIdentificador" => $this->identities['account_id']
             ])
         );
+
+        $cupsList = [];
+        foreach ($response['data']['lstCups'] as $cont) {
+            if (in_array($cont['Id'], $response['data']['lstIds'])) {
+                $cupsList[] = new CUPS(
+                    cups: $cont['CUPs__r']['Name'],
+                    cupsId: $cont['CUPs__r']['Id'],
+                    id: $cont['Id'],
+                    active: !isset($cont['Version_end_date__c']),
+                    power: $cont['Requested_power_1__c'],
+                    rate: $cont['rate']
+                );
+            }
+        }
+
+        return $cupsList;
     }
 
     /**
@@ -243,21 +260,32 @@ trait ActionsDefinition
     }
 
     /**
-     * @param string $cups
-     * @param DateTimeImmutable $startDate
-     * @param DateTimeImmutable $endDate
+     * @param CUPS $cups
+     * @param DateTimeImmutable|string $startDate
+     * @param DateTimeImmutable|string $endDate
      *
      * @return array|string
      * @throws Exception
      */
-    public function get_meas_interval(string $cups, DateTimeImmutable $startDate, DateTimeImmutable $endDate): array|string
-    {
+    public function get_meas_interval(
+        CUPS $cups,
+        DateTimeImmutable|string $startDate,
+        DateTimeImmutable|string $endDate
+    ): array|string {
+        if (is_string($startDate)) {
+            $startDate = DateTimeImmutable::createFromFormat("d/m/Y", $startDate);
+        }
+
+        if (is_string($endDate)) {
+            $endDate = DateTimeImmutable::createFromFormat("d/m/Y", $endDate);
+        }
+
         return $this->run_action_command(
             new Actions\GetMeasInterval([
                 "startDate" => $startDate->format("Y-m-d"),
                 "endDate" => $endDate->format("Y-m-d"),
                 "type" => 4,
-                "contId" => $cups
+                "contId" => $cups->getId()
             ])
         );
     }
