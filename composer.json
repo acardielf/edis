@@ -23,13 +23,13 @@
     }
   ],
   "require": {
-    "monolog/monolog": "^3.0",
+    "monolog/monolog": "^3.9",
     "guzzlehttp/guzzle": "^7.9",
     "mck89/peast": "dev-master",
     "ext-dom": "*"
   },
   "require-dev": {
     "ext-http": "*",
-    "vlucas/phpdotenv": "^5.4"
+    "vlucas/phpdotenv": "^5.6"
   }
 }

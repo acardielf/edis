@@ -55,7 +55,7 @@ trait GetUrl
                 $this->log->debug("Response error is not JSON format");
             }
         }
-        return $response;
+        return $this->execute_redirect($response);
     }
 
 }

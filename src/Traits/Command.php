@@ -5,6 +5,7 @@ namespace Edistribucion\Traits;
 use Edistribucion\EdisActionGeneric;
 use Edistribucion\EdisConfigStatic;
 use Edistribucion\EdisError;
+use Exception;
 
 trait Command
 {
@@ -19,7 +20,7 @@ trait Command
      *
      * @return string|array
      * @throws EdisError
-     * @throws \Exception
+     * @throws Exception
      */
     private function command(string $command, array $options, bool $recursive = false): string|array
     {
@@ -117,9 +118,9 @@ trait Command
 
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    private function run_action_command(EdisActionGeneric $action, string $command = null): string|array
+    private function run_action_command(EdisActionGeneric $action, ?string $command = null): string|array
     {
         $data = ['message' => '{"actions":[' . $action . ']}'];
         $command = ($command) ?: $action->getCommand();

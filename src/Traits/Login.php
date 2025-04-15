@@ -66,7 +66,7 @@ trait Login
                 'message' => '{"actions":[' . $action . ']}',
                 'aura.context' => $this->context,
                 'aura.pageURI' => EdisConfigStatic::EDIS_AREAPRIVADA_URL,
-                'aura.token' => 'undefined',
+                'aura.token' => 'null',
             ],
         ])->getBody()->getContents();
 

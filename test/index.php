@@ -50,8 +50,8 @@ try {
 //var_dump($edis->get_login_info());
 
 $cups = $edis->get_list_cups();
+var_dump($cups);
 
-//var_dump($cups);
 //var_dump($edis->get_cups_info($homeCups));
 //var_dump($edis->get_meter($homeCups));
 //var_dump($edis->get_cups_detail($homeCups));
@@ -68,13 +68,13 @@ $cups = $edis->get_list_cups();
 //);
 
 /** Get measure from CUPS by date interval */
-var_dump(
-    $edis->get_meas_interval(
-        cups: $cups[0],
-        startDate: "20/07/2024",
-        endDate: "30/07/2024"
-    )
-);
+//var_dump(
+//    $edis->get_meas_interval(
+//        cups: $cups[0],
+//        startDate: "20/07/2024",
+//        endDate: "30/07/2024"
+//    )
+//);
 
 //var_dump($edis->get_measure($homeCups));
 //var_dump($edis->get_maximeter($homeCups));

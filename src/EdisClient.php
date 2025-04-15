@@ -42,6 +42,7 @@ class EdisClient
     use Traits\Files;
     use Traits\Login;
     use Traits\GetUrl;
+    use Traits\ExecuteRedirect;
     use Traits\Command;
     use Traits\Logger;
     use Traits\ActionsDefinition;
